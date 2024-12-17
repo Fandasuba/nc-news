@@ -8,14 +8,14 @@ const ViewArticle = () => {
   const [article, setArticle] = useState(null);
   const [error, setError] = useState(null);
 
-  console.log("article_id from params:", article_id);
+  // console.log("article_id from params:", article_id);
 
   useEffect(() => {
     if (article_id) {
       getArticleById(article_id)
         .then((articleData) => {
           setArticle(articleData); // Set the article data
-          console.log("Fetched article data:", articleData);
+          //  console.log("Fetched article data:", articleData);
         })
         .catch((err) => {
           console.error("Error fetching article:", err);

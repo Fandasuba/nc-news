@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const ArticleCard = ({ article, className }) => {
   return (
@@ -19,7 +20,8 @@ const ArticleCard = ({ article, className }) => {
           </p>
           <p>{article.topic}</p>
           <p>
-            by {article.author} on {article.created_at}
+            by {article.author} on{" "}
+            {moment(article.created_at).format("Do MMM, YYYY, @ h:mm A")}
           </p>
         </div>
       </div>
