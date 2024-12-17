@@ -12,7 +12,6 @@ const AllArticles = () => {
         const sortedArticles = [...articles].sort(
           (a, b) => new Date(b.created_at) - new Date(a.created_at)
         );
-        console.log(sortedArticles);
         setArticles(sortedArticles);
       })
       .then(() => {

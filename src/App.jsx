@@ -4,6 +4,7 @@ import Homepage from "./components/Homepage";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
+import ViewArticle from "./components/ViewArticle";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/articles" element={<AllArticles />} />
+            <Route path="/articles/:article_id" element={<ViewArticle />} />;
           </Routes>
         </main>
         <footer>
