@@ -2,6 +2,7 @@ import React from "react";
 import CommentCard from "./CommentCard";
 import moment from "moment";
 import ArticleVote from "./ArticleVote";
+import PostComment from "./PostComment";
 
 const LoadedArticle = ({ article }) => {
   //   console.log(article, "inside loaded article for article props");
@@ -23,6 +24,7 @@ const LoadedArticle = ({ article }) => {
           <p>Comment Count:&nbsp;{article.comment_count}</p>
         </div>
       </article>
+      <PostComment article_id={article.article_id} />
       <CommentCard article_id={article.article_id} />
     </>
   );

@@ -5,7 +5,7 @@ const ArticleVote = ({ article }) => {
   const [voteSubmission, setVoteSubmission] = useState("");
 
   const handleClick = (vote) => {
-    console.log(article, "inside articlevote.");
+    // console.log(article, "inside articlevote.");
     patchArticleVotes(article.article_id, vote)
       .then(() => {
         setVotes((prevVotes) => {

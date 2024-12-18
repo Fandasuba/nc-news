@@ -252,3 +252,45 @@ html {
   font-size: 18px;
   color: #ffc014a8;
 }
+
+/* Comments Form */
+.post-comment-to-article {
+  background-image: linear-gradient(90deg, #040e14, #0c1e29);
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.form-username,
+.form-body {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.form-username label,
+.form-body label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-username-box,
+.form-comments-box {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-comments-box {
+  height: 150px;
+}
+.form-optimistic-rendering {
+  color: #ffc014a8;
+}
