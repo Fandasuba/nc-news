@@ -33,6 +33,10 @@ export const getUsers = (author) => {
 
 export const patchArticleVotes = (article_id, vote) => {
   return api.patch(`/articles/${article_id}`, { inc_votes: vote }).then(() => {
-    console.log("patching article vote");
+    // console.log("patching article vote");
   });
+};
+
+export const postNewComment = (username, body, article_id) => {
+  return api.post(`/articles/${article_id}/comments`, { username, body });
 };
