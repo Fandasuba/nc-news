@@ -5,31 +5,40 @@ import moment from "moment";
 // import thumbsUpIcon from "../assets/thumbs-up_icon-icons.com_73369.png";
 // import thumbsDownIcon from "../assets/thumbs_down_icon_194546.png";
 
-const CommentCard = ({ article_id }) => {
+const CommentCard = ({ article_id, refreshComments }) => {
   const [comments, setComments] = useState([]);
   const [avatars, setAvatars] = useState([]);
 
-  useEffect(() => {
+  const fetchCommentsAndAvatars = () => {
+    // Fetch comments for the article
     getCommentsForArticles(article_id).then((data) => {
       setComments(data.comments);
-      //console.log(data, "data comments");
     });
 
+    // Fetch user avatars
     getUsers().then((data) => {
-      // console.log(data, "inside getUsers in CommentCard");
       setAvatars(data.users);
     });
+  };
+
+  useEffect(() => {
+    // Initial fetch on component mount
+    fetchCommentsAndAvatars();
   }, [article_id]);
 
-  // Helper function to find avatar URL for a comment's author per Aimee's feedback. I genuinely forgot there were avatar urls in the users table, hence placing custom SVGs. More good practice though!
+  useEffect(() => {
+    // Trigger a re-fetch when refreshComments changes
+    if (refreshComments) {
+      fetchCommentsAndAvatars();
+    }
+  }, [refreshComments]);
+
   const getAvatarForAuthor = (author) => {
     const user = avatars.find((user) => user.username === author);
     return user
       ? user.avatar_url
       : "https://duckduckgo.com/i/a62c4a70778183e1.png";
   };
-
-  // console.log(avatars, "avatars");
 
   return (
     <div className="comments-container">

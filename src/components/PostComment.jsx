@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { postNewComment } from "../api";
 
-const PostComment = ({ article_id }) => {
+const PostComment = ({ article_id, setRefreshComments }) => {
   const [username, setUsername] = useState("");
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +23,7 @@ const PostComment = ({ article_id }) => {
       .then(() => {
         setLoading(false);
         setSuccessMessage("Post Successful!");
+        setRefreshComments(true);
       })
       .catch((err) => {
         setLoading(false);
