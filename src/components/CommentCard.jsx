@@ -1,5 +1,5 @@
 import React from "react";
-import { getCommentsForArticles } from "../api";
+import { getCommentsForArticles, getUsers } from "../api";
 import { useState, useEffect } from "react";
 import moment from "moment";
 // import thumbsUpIcon from "../assets/thumbs-up_icon-icons.com_73369.png";
@@ -7,12 +7,29 @@ import moment from "moment";
 
 const CommentCard = ({ article_id }) => {
   const [comments, setComments] = useState([]);
+  const [avatars, setAvatars] = useState([]);
+
   useEffect(() => {
     getCommentsForArticles(article_id).then((data) => {
       setComments(data.comments);
-      // console.log(data, "data comments");
+      //console.log(data, "data comments");
+    });
+
+    getUsers().then((data) => {
+      // console.log(data, "inside getUsers in CommentCard");
+      setAvatars(data.users);
     });
   }, [article_id]);
+
+  // Helper function to find avatar URL for a comment's author per Aimee's feedback. I genuinely forgot there were avatar urls in the users table, hence placing custom SVGs. More good practice though!
+  const getAvatarForAuthor = (author) => {
+    const user = avatars.find((user) => user.username === author);
+    return user
+      ? user.avatar_url
+      : "https://duckduckgo.com/i/a62c4a70778183e1.png";
+  };
+
+  // console.log(avatars, "avatars");
 
   return (
     <div className="comments-container">
@@ -20,7 +37,7 @@ const CommentCard = ({ article_id }) => {
         <div key={comment.comment_id} className="comment-card">
           <div className="comment-header">
             <img
-              src={`https://api.dicebear.com/5.x/initials/svg?seed=${comment.author}`}
+              src={getAvatarForAuthor(comment.author)}
               alt={`${comment.author}'s avatar`}
               className="comment-avatar"
             />

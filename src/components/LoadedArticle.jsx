@@ -1,6 +1,7 @@
 import React from "react";
 import CommentCard from "./CommentCard";
 import moment from "moment";
+import ArticleVote from "./ArticleVote";
 
 const LoadedArticle = ({ article }) => {
   //   console.log(article, "inside loaded article for article props");
@@ -16,7 +17,10 @@ const LoadedArticle = ({ article }) => {
             {moment(article.created_at).format("Do, MMM, YYYY, @ h:mm A")}
           </p>
           <p>{article.body}</p>
-          <p>Comment Count: {article.comment_count}</p>
+          <br></br>
+          <ArticleVote article={article} />
+          <br></br>
+          <p>Comment Count:&nbsp;{article.comment_count}</p>
         </div>
       </article>
       <CommentCard article_id={article.article_id} />
