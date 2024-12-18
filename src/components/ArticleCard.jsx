@@ -8,6 +8,9 @@ const ArticleCard = ({ article, className }) => {
       to={`/articles/${article.article_id}`}
       className={`${className} card-link`}
     >
+      <div className="article-votes">
+        <label>🔥{article.votes}</label>
+      </div>
       <div className={className}>
         <img
           src={article.article_img_url}
