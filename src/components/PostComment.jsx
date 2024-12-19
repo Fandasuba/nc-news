@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import { postNewComment } from "../api";
+import { useUser } from "../../UserContext";
 
 const PostComment = ({ article_id, setRefreshComments }) => {
-  const [username, setUsername] = useState("");
+  const { user } = useUser();
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
   const handleBodyChange = (e) => {
     setBody(e.target.value);
   };
@@ -19,29 +17,30 @@ const PostComment = ({ article_id, setRefreshComments }) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    const username = user ? user.username : "";
+
+    if (!username) {
+      setError("User not found. Please log in.");
+      setLoading(false);
+      return;
+    }
+
     postNewComment(username, body, article_id)
       .then(() => {
         setLoading(false);
-        setSuccessMessage("Post Successful!");
+        setSuccessMessage(
+          "Post Successful - The comments list will now refresh!"
+        );
         setRefreshComments(true);
       })
       .catch((err) => {
         setLoading(false);
-        setError("Provide valid Username or body.");
+        setError("Provide valid comment body.");
       });
   };
 
   return (
     <form className="post-comment-to-article">
-      <label className="form-username">
-        Username:
-        <input
-          placeholder="Username goes here."
-          className="form-username-box"
-          required
-          onChange={handleUsernameChange}
-        />
-      </label>
       <label className="form-body">
         Share your thoughts?:
         <textarea
@@ -57,7 +56,6 @@ const PostComment = ({ article_id, setRefreshComments }) => {
       <button
         type="reset"
         onClick={() => {
-          setUsername("");
           setBody("");
         }}
       >

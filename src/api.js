@@ -40,3 +40,7 @@ export const patchArticleVotes = (article_id, vote) => {
 export const postNewComment = (username, body, article_id) => {
   return api.post(`/articles/${article_id}/comments`, { username, body });
 };
+
+export const deleteComments = (comment_id) => {
+  return api.delete(`/comments/${comment_id}`);
+};

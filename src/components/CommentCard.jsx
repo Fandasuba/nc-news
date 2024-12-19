@@ -1,35 +1,24 @@
-import React from "react";
-import { getCommentsForArticles, getUsers } from "../api";
-import { useState, useEffect } from "react";
+import { useUser } from "../../UserContext";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
-// import thumbsUpIcon from "../assets/thumbs-up_icon-icons.com_73369.png";
-// import thumbsDownIcon from "../assets/thumbs_down_icon_194546.png";
+import { fetchCommentsAndAvatars } from "../../utils";
+import { deleteComments } from "../api";
 
-const CommentCard = ({ article_id, refreshComments }) => {
+const CommentCard = ({ article_id, refreshComments, setRefreshComments }) => {
+  const { user } = useUser();
   const [comments, setComments] = useState([]);
   const [avatars, setAvatars] = useState([]);
-
-  const fetchCommentsAndAvatars = () => {
-    // Fetch comments for the article
-    getCommentsForArticles(article_id).then((data) => {
-      setComments(data.comments);
-    });
-
-    // Fetch user avatars
-    getUsers().then((data) => {
-      setAvatars(data.users);
-    });
-  };
+  const [deleteMessage, setDelete] = useState("");
 
   useEffect(() => {
-    // Initial fetch on component mount
-    fetchCommentsAndAvatars();
+    // Initial fetch on component mount or when article_id changes
+    fetchCommentsAndAvatars(article_id, setComments, setAvatars);
   }, [article_id]);
 
   useEffect(() => {
     // Trigger a re-fetch when refreshComments changes
     if (refreshComments) {
-      fetchCommentsAndAvatars();
+      fetchCommentsAndAvatars(article_id, setComments, setAvatars);
     }
   }, [refreshComments]);
 
@@ -38,6 +27,26 @@ const CommentCard = ({ article_id, refreshComments }) => {
     return user
       ? user.avatar_url
       : "https://duckduckgo.com/i/a62c4a70778183e1.png";
+  };
+
+  const handleDelete = (comment_id) => {
+    setComments((prevComments) =>
+      prevComments.filter((comment) => comment.comment_id !== comment_id)
+    );
+    setDelete(
+      "Deleting comment in progress. Comment list should soon refresh."
+    );
+    deleteComments(comment_id)
+      .then(() => {
+        setDelete("Comment deleted successfully.");
+        // setRefreshComments(true);
+      })
+      .catch((err) => {
+        console.error("Error deleting comment:", err);
+        setDelete("Error deleting comment.");
+        // Revert state in case of error
+        fetchCommentsAndAvatars(article_id, setComments, setAvatars);
+      });
   };
 
   return (
@@ -63,6 +72,14 @@ const CommentCard = ({ article_id, refreshComments }) => {
               Votes: {comment.votes}{" "}
               <button className="comment-vote-buttons">👍</button>
               <button className="comment-vote-buttons">👎</button>
+              {user && user.username === comment.author && (
+                <button
+                  className="comment-vote-buttons"
+                  onClick={() => handleDelete(comment.comment_id)}
+                >
+                  Delete
+                </button>
+              )}
             </p>
           </div>
         </div>
