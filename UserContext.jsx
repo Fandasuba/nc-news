@@ -13,7 +13,6 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     getUsers().then(({ users }) => {
-      console.log("Fetched Users:", typeof users);
       const userFound = users.find((user) => user.username === testUsername);
       if (userFound) {
         setUser(userFound);
