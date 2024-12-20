@@ -4,10 +4,21 @@ const api = axios.create({
   baseURL: "https://news-room-project.onrender.com/api",
 });
 
-export const getArticles = () => {
-  return api.get("/articles").then(({ data }) => {
-    return data.articles;
-  });
+export const getArticles = (sortBy = "created_at", orderBy = "asc") => {
+  return api
+    .get("/articles", {
+      params: {
+        sort_by: sortBy,
+        order: orderBy,
+      },
+    })
+    .then(({ data }) => {
+      return data.articles;
+    })
+    .catch((err) => {
+      console.error("Error fetching articles:", err);
+      throw err;
+    });
 };
 
 export const getArticleById = (article_id) => {
