@@ -20,7 +20,7 @@ Robinson Reports is a custom-made news website that emulates a dynamic news plat
 
 **Note:** The idea behind the app is to show my skillset that i have picked up and learned gradually over a few weeks with Northcoders. Here, i got to test my skills making requests to get dara, mess with Routers, display pages, create components, manage hooks, experiement with Context, Optimistic Rendering, Accessibility, and props. We alos used many hooks, installed other addons to convert timestamps into readable data for front end users, provide error handling and feedback. Oh and i spent a lot of time with CSS as i love being creative. Its was arguably one of the best parts of this project to be honest. Below is a clip of one of my favourite parts o creating the app.
 
-![gif of my custom css animations on my error handling.](<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe id="js_video_iframe" src="https://jumpshare.com/embed/B6hl2jV5OyGu61xQkIUi" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>)
+[![Watch the video](https://img.youtube.com/vi/1041186529/maxresdefault.jpg)](https://vimeo.com/1041186529?ts=0&share=copy)
 
 ## Back-End Repository
 
