@@ -4,21 +4,29 @@ import moment from "moment";
 import { fetchCommentsAndAvatars } from "../../utils";
 import { deleteComments } from "../api";
 
-const CommentCard = ({ article_id, refreshComments, setRefreshComments }) => {
+const CommentCard = ({
+  article_id,
+  refreshComments,
+  setRefreshComments,
+  updateCommentCount,
+}) => {
   const { user } = useUser();
   const [comments, setComments] = useState([]);
   const [avatars, setAvatars] = useState([]);
-  const [deleteMessage, setDelete] = useState("");
+  const [deleteMessage, setDelete] = useState({});
+  const [shakeComment, setShakeComment] = useState({});
+  const [errorComment, setErrorComment] = useState({}); // Track error state by comment ID
 
   useEffect(() => {
-    // Initial fetch on component mount or when article_id changes
     fetchCommentsAndAvatars(article_id, setComments, setAvatars);
   }, [article_id]);
 
   useEffect(() => {
-    // Trigger a re-fetch when refreshComments changes
     if (refreshComments) {
       fetchCommentsAndAvatars(article_id, setComments, setAvatars);
+      setDelete({});
+      setShakeComment({});
+      setErrorComment({});
     }
   }, [refreshComments]);
 
@@ -30,29 +38,63 @@ const CommentCard = ({ article_id, refreshComments, setRefreshComments }) => {
   };
 
   const handleDelete = (comment_id) => {
+    const deletedComment = comments.find(
+      (comment) => comment.comment_id === comment_id
+    );
+
     setComments((prevComments) =>
       prevComments.filter((comment) => comment.comment_id !== comment_id)
     );
-    setDelete(
-      "Deleting comment in progress. Comment list should soon refresh."
-    );
+    setDelete((prev) => ({
+      ...prev,
+      [comment_id]: "Deleting comment in progress...",
+    }));
+
     deleteComments(comment_id)
       .then(() => {
-        setDelete("Comment deleted successfully.");
-        // setRefreshComments(true);
+        setDelete((prev) => ({
+          ...prev,
+          [comment_id]: "Comment deleted successfully.",
+        }));
+        setRefreshComments(true);
+        updateCommentCount((prevCount) => prevCount - 1);
       })
       .catch((err) => {
         console.error("Error deleting comment:", err);
-        setDelete("Error deleting comment.");
-        // Revert state in case of error
-        fetchCommentsAndAvatars(article_id, setComments, setAvatars);
+        setDelete((prev) => ({
+          ...prev,
+          [comment_id]:
+            "Failed to delete comment. Try again later or check your connection.",
+        }));
+        // Re-add the comment to the list and trigger shake animation
+        setComments((prevComments) => [deletedComment, ...prevComments]);
+        setShakeComment((prev) => ({
+          ...prev,
+          [comment_id]: true,
+        }));
+        setErrorComment((prev) => ({
+          ...prev,
+          [comment_id]: true,
+        }));
+        // Remove shake animation class after it completes
+        setTimeout(() => {
+          setShakeComment((prev) => ({
+            ...prev,
+            [comment_id]: false,
+          }));
+        }, 500); // Match the duration of the shake animation
       });
   };
 
   return (
     <div className="comments-container">
       {comments.map((comment) => (
-        <div key={comment.comment_id} className="comment-card">
+        <div
+          key={comment.comment_id}
+          className={`comment-card ${
+            shakeComment[comment.comment_id] ? "shake" : ""
+          } ${errorComment[comment.comment_id] ? "error" : ""}`}
+        >
           <div className="comment-header">
             <img
               src={getAvatarForAuthor(comment.author)}
@@ -82,6 +124,11 @@ const CommentCard = ({ article_id, refreshComments, setRefreshComments }) => {
               )}
             </p>
           </div>
+          {deleteMessage[comment.comment_id] && (
+            <p className="delete-message">
+              {deleteMessage[comment.comment_id]}
+            </p>
+          )}
         </div>
       ))}
     </div>

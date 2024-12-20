@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import UserAccount from "./UserAccount";
+import SortMenu from "./SortMenu";
 
 const Header = ({ topics }) => {
   const navigate = useNavigate();
@@ -52,7 +53,6 @@ const Header = ({ topics }) => {
           </ul>
         )}
       </nav>
-
       <div className="user-info">
         <UserAccount />
       </div>

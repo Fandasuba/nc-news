@@ -7,10 +7,11 @@ import { useUser } from "../../UserContext";
 
 const LoadedArticle = ({ article }) => {
   const [refreshComments, setRefreshComments] = useState(false);
+  const [commentCount, setCommentCount] = useState(article.comment_count);
   const { user } = useUser();
 
   const handleRefreshComments = () => {
-    setRefreshComments(false); // aiming to re render as false once the trigger happens.
+    setRefreshComments(false);
   };
 
   useEffect(() => {
@@ -18,6 +19,10 @@ const LoadedArticle = ({ article }) => {
       handleRefreshComments();
     }
   }, [refreshComments]);
+
+  const updateCommentCount = (newCount) => {
+    setCommentCount(newCount);
+  };
 
   return (
     <>
@@ -31,21 +36,22 @@ const LoadedArticle = ({ article }) => {
             {moment(article.created_at).format("Do, MMM, YYYY, @ h:mm A")}
           </p>
           <p>{article.body}</p>
-          <br></br>
+          <br />
           <ArticleVote article={article} />
-          <br></br>
-          <p>Comment Count:&nbsp;{article.comment_count}</p>
+          <br />
+          <p>Comment Count: {commentCount}</p>
         </div>
       </article>
       <PostComment
         article_id={article.article_id}
         setRefreshComments={setRefreshComments}
-        children={user}
+        updateCommentCount={updateCommentCount}
       />
       <CommentCard
         article_id={article.article_id}
         refreshComments={refreshComments}
-        user={user}
+        setRefreshComments={setRefreshComments}
+        updateCommentCount={updateCommentCount}
       />
     </>
   );
