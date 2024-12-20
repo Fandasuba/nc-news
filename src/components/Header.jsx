@@ -18,15 +18,23 @@ const Header = ({ topics }) => {
   const handleGoToTopicsClick = () => {
     navigate("/topics");
   };
+
+  const handleLogoClick = () => {
+    navigate("/");
+  };
+
   const isTopicsPage = location.pathname.startsWith("/topics");
 
   return (
     <header className="header">
-      <img
-        src="https://logodix.com/logo/247130.jpg"
-        alt="Logo"
-        className="logo-image"
-      />
+      <button onClick={handleLogoClick} className="logo-button">
+        <img
+          src="https://logodix.com/logo/247130.jpg"
+          alt="Logo"
+          className="logo-image"
+        />
+      </button>
+
       <nav className="nav">
         <ul>
           <li>
@@ -59,4 +67,5 @@ const Header = ({ topics }) => {
     </header>
   );
 };
+
 export default Header;
