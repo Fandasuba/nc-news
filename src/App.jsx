@@ -6,7 +6,7 @@ import Header from "./components/Header";
 import ViewArticle from "./components/ViewArticle";
 import { UserProvider } from "../UserContext";
 import ViewTopics from "./components/ViewTopics";
-import ArticlesByTopic from "./components/ArticlesByTopic";
+// import ArticlesByTopic from "./components/ArticlesByTopic";
 import { useState, useEffect } from "react";
 import { getArticles } from "./api";
 
@@ -34,7 +34,7 @@ const App = () => {
               <Route path="/articles" element={<AllArticles />} />
               <Route path="/articles/:article_id" element={<ViewArticle />} />
               <Route path="/topics" element={<ViewTopics />} />
-              <Route path="/topics/:topic" element={<ArticlesByTopic />} />
+              <Route path="/topics/:topic" element={<AllArticles />} />
             </Routes>
           </main>
           <footer>
