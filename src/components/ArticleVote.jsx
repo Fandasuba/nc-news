@@ -1,19 +1,22 @@
 import { patchArticleVotes } from "../api";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
 const ArticleVote = ({ article }) => {
   const [voteTally, setVotes] = useState(article.votes);
   const [voteSubmission, setVoteSubmission] = useState("");
+  const [voteStatus, setVoteStatus] = useState(""); // "success" or "error"
 
   const handleClick = (vote) => {
-    // console.log(article, "inside articlevote.");
     patchArticleVotes(article.article_id, vote)
       .then(() => {
         setVotes((prevVotes) => {
           if (vote === -1) {
-            setVoteSubmission("Article successfully down voted.");
+            setVoteSubmission("Article successfully downvoted.");
+            setVoteStatus("success");
             return prevVotes - 1;
           } else {
-            setVoteSubmission("Article successfully up voted.");
+            setVoteSubmission("Article successfully upvoted.");
+            setVoteStatus("success");
             return prevVotes + 1;
           }
         });
@@ -21,8 +24,10 @@ const ArticleVote = ({ article }) => {
       .catch((error) => {
         console.error("Error in voting:", error);
         setVoteSubmission("Error updating the vote.");
+        setVoteStatus("error");
       });
   };
+
   return (
     <>
       <div className="rating-system">
@@ -38,7 +43,19 @@ const ArticleVote = ({ article }) => {
         </button>
         Popularity: 🔥&nbsp; {voteTally}
       </div>
-      <p>{voteSubmission}</p>
+      <p
+        style={{
+          color:
+            voteStatus === "success"
+              ? "green"
+              : voteStatus === "error"
+              ? "red"
+              : "inherit",
+          fontWeight: voteStatus ? "bold" : "normal",
+        }}
+      >
+        {voteSubmission}
+      </p>
     </>
   );
 };
